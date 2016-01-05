@@ -52,7 +52,6 @@ int main()
 				if((m < 0)){
 					m = 87;
 				}
-				printf("%02i %04i %i\n", m, l[m], i);
 			}
 			printf("menu decremented\ncurrently displaying menu%04i.bin\n", l[m]);
 		}else if(hidKeysDown() & KEY_R){
@@ -62,15 +61,11 @@ int main()
 			}
 			while(i != l[m]){
 				m++;
-				printf("%02i %04i %i\n", m, l[m], i);
 				if((m > 87)){
 					m = 0;
 				}
 			}
 			printf("menu incremented\ncurrently displaying menu%04i.bin\n", l[m]);		
-		}else if(hidKeysDown() & KEY_LEFT){
-			m++;
-			printf("menu incremented\n");
 		}
 	}
 	return 0;
