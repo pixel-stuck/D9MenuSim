@@ -1,7 +1,7 @@
 # D9MenuSim
 A menu simulator for Decrypt9 and EmuNAND9
 
-Currently only displays the filename that will eventually be used for the menu images
+Currently displays the bottom screen menu structure and displays the currently loaded file on the top screen
 
 #Building
 Requires that you have a standard 3ds compilation environment set up on your computer
