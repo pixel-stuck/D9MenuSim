@@ -9,6 +9,7 @@ char n[19];
 
 void displayimage()
 {
+	printf("%s\n", n);
 	FILE *file = fopen(n,"rb");
 	if (file == NULL) return 0;
 	fseek(file,0,SEEK_END);
@@ -41,11 +42,10 @@ int main()
 	}
 	m = 0;
 	snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
-	printf("%s\n", n);
 	displayimage();
-	while(l[m] >= 0 && l[m] <= 1208 ){
+	while(aptMainLoop()){
 		hidScanInput();
-		if(hidKeysDown() & KEY_START) break;
+		if(hidKeysDown() & KEY_START) goto exit;
 		if(hidKeysDown() & KEY_DOWN){
 			if (!(l[m + 1] > (l[m] + 1))){
 				++m;
@@ -54,7 +54,6 @@ int main()
 				}
 			}
 			snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
-			printf("%s\n", n);
 			displayimage();
 		}else if(hidKeysDown() & KEY_UP){
 			if (!(l[m - 1] < (l[m] - 1))){
@@ -64,7 +63,6 @@ int main()
 				}	
 			}
 			snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
-			printf("%s\n", n);
 			displayimage();
 		}else if(hidKeysDown() & KEY_L){
 			i = ((l[m] / 100 - 1) * 100);
@@ -78,7 +76,6 @@ int main()
 				}
 			}
 			snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
-			printf("%s\n", n);
 			displayimage();
 		}else if(hidKeysDown() & KEY_R){
 			i = ((l[m] / 100 + 1) * 100);
@@ -92,9 +89,11 @@ int main()
 				}
 			}
 			snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
-			printf("%s\n", n);
 			displayimage();		
 		}
 	}
+	exit:
+
+	gfxExit();
 	return 0;
 }
