@@ -4,11 +4,15 @@
 
 #include <3ds.h>
 
+#include "d9menu.h"
+
 u8* buffer;
-char n[19];
+int  i, j, k = 0, m = 0;
 
 void displayimage()
 {
+	char n[sizeof(path) + 15];
+	snprintf(n, sizeof(n), "/%s/menu%04i.bin", path, l[m]);
 	printf("%s\n", n);
 	FILE *file = fopen(n,"rb");
 	if (file == NULL) return 0;
@@ -29,7 +33,6 @@ int main(int argc, char** argv)
 {
 	gfxInitDefault();
 	consoleInit(GFX_TOP, NULL);
-	int  i, j, k = 0, l[88], m = 0, menu[13] = {4, 3, 8, 9, 6, 6, 6, 6, 6, 8, 9, 8, 9};
 	for (j = 0; j < 13; j++){
 		while (k < menu[j]){
 		l[m] = (j*100 + k);
@@ -41,7 +44,6 @@ int main(int argc, char** argv)
 		}
 	}
 	m = 0;
-	snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
 	displayimage();
 	while(aptMainLoop()){
 		hidScanInput();
@@ -58,7 +60,6 @@ int main(int argc, char** argv)
 					--m;
 				}
 			}
-			snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
 			displayimage();
 		}else if(hidKeysDown() & KEY_UP){
 			if (!(l[m - 1] < (l[m] - 1)) & !(m == 0)){
@@ -76,7 +77,6 @@ int main(int argc, char** argv)
 					}
 				}
 			}
-			snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
 			displayimage();
 		}else if(hidKeysDown() & KEY_L){
 			i = ((l[m] / 100 - 1) * 100);
@@ -89,7 +89,6 @@ int main(int argc, char** argv)
 					m = 87;
 				}
 			}
-			snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
 			displayimage();
 		}else if(hidKeysDown() & KEY_R){
 			i = ((l[m] / 100 + 1) * 100);
@@ -102,7 +101,6 @@ int main(int argc, char** argv)
 					m = 0;
 				}
 			}
-			snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
 			displayimage();		
 		}
 	}
