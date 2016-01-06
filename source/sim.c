@@ -25,7 +25,7 @@ void displayimage()
 	gspWaitForEvent(GSPGPU_EVENT_VBlank0, false);
 }
 
-int main()
+int main(int argc, char** argv)
 {
 	gfxInitDefault();
 	consoleInit(GFX_TOP, NULL);
@@ -45,22 +45,36 @@ int main()
 	displayimage();
 	while(aptMainLoop()){
 		hidScanInput();
-		if(hidKeysDown() & KEY_START) goto exit;
+		if(hidKeysDown() & KEY_START) break;
 		if(hidKeysDown() & KEY_DOWN){
-			if (!(l[m + 1] > (l[m] + 1))){
+			if (!(l[m + 1] > (l[m] + 1)) & !(m == 87)){
 				++m;
 				if(m >= 87){
 					m = 87;
+				}
+			}else{
+				i = ((l[m] / 100) * 100);
+				while(i != l[m]){
+					--m;
 				}
 			}
 			snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
 			displayimage();
 		}else if(hidKeysDown() & KEY_UP){
-			if (!(l[m - 1] < (l[m] - 1))){
+			if (!(l[m - 1] < (l[m] - 1)) & !(m == 0)){
 				--m;
 				if(m <= 0){
 					m = 0;
 				}	
+			}else{
+				i = (l[m] / 100);
+				i = ((menu[i] - 1) + i * 100);
+				while(i != l[m]){
+					++m;
+					if(m > 87){
+						m = 0;
+					}
+				}
 			}
 			snprintf(n, sizeof(n), "/D9UI/menu%04i.bin", l[m]);
 			displayimage();
@@ -92,8 +106,7 @@ int main()
 			displayimage();		
 		}
 	}
-	exit:
-
+	printf("shutting down");
 	gfxExit();
 	return 0;
 }
