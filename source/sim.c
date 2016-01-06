@@ -4,16 +4,17 @@
 
 #include <3ds.h>
 
-#include "d9menu.h"
+#include "e9menu.h"
 
 u8* buffer;
 int  i, j, k = 0, m = 0;
+char n[sizeof(path) + 15];
 
 void displayimage()
 {
-	char n[sizeof(path) + 15];
 	snprintf(n, sizeof(n), "/%s/menu%04i.bin", path, l[m]);
 	printf("%s\n", n);
+	printf("%i\n", (sizeof(path) + 15));
 	FILE *file = fopen(n,"rb");
 	if (file == NULL) return 0;
 	fseek(file,0,SEEK_END);
@@ -33,7 +34,7 @@ int main(int argc, char** argv)
 {
 	gfxInitDefault();
 	consoleInit(GFX_TOP, NULL);
-	for (j = 0; j < 13; j++){
+	for (j = 0; j < num_menus; j++){
 		while (k < menu[j]){
 		l[m] = (j*100 + k);
 		++k;
@@ -49,10 +50,10 @@ int main(int argc, char** argv)
 		hidScanInput();
 		if(hidKeysDown() & KEY_START) break;
 		if(hidKeysDown() & KEY_DOWN){
-			if (!(l[m + 1] > (l[m] + 1)) & !(m == 87)){
+			if (!(l[m + 1] > (l[m] + 1)) & !(m == (max_entries - 1))){
 				++m;
-				if(m >= 87){
-					m = 87;
+				if(m >= (max_entries - 1)){
+					m = (max_entries - 1);
 				}
 			}else{
 				i = ((l[m] / 100) * 100);
@@ -72,7 +73,7 @@ int main(int argc, char** argv)
 				i = ((menu[i] - 1) + i * 100);
 				while(i != l[m]){
 					++m;
-					if(m > 87){
+					if(m > (max_entries - 1)){
 						m = 0;
 					}
 				}
@@ -81,30 +82,29 @@ int main(int argc, char** argv)
 		}else if(hidKeysDown() & KEY_L){
 			i = ((l[m] / 100 - 1) * 100);
 			if((i < 0)){
-				i = 1200;
+				i = ((menu[num_menus - 1] - 1) + ((l[max_entries - 1] / 100) * 100));
 			}
+			printf("%i\n", i);
 			while(i != l[m]){
 				--m;
 				if((m < 0)){
-					m = 87;
+					m = (max_entries - 1);
 				}
 			}
 			displayimage();
 		}else if(hidKeysDown() & KEY_R){
 			i = ((l[m] / 100 + 1) * 100);
-			if((i > 1200)){
+			if((i > (l[max_entries - 1] / 100) * 100)){
 				i = 0;
 			}
 			while(i != l[m]){
 				m++;
-				if((m > 87)){
+				if((m > (max_entries - 1))){
 					m = 0;
 				}
 			}
 			displayimage();		
 		}
 	}
-	printf("shutting down");
-	gfxExit();
 	return 0;
 }
