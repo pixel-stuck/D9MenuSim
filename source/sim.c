@@ -13,8 +13,6 @@ char n[sizeof(path) + 15];
 void displayimage()
 {
 	snprintf(n, sizeof(n), "/%s/menu%04i.bin", path, l[m]);
-	printf("%s\n", n);
-	printf("%i\n", (sizeof(path) + 15));
 	FILE *file = fopen(n,"rb");
 	if (file == NULL) return 0;
 	fseek(file,0,SEEK_END);
