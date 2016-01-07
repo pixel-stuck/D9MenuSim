@@ -88,7 +88,6 @@ int main(int argc, char** argv)
 					i = ((submenu_start - 1) * 100);
 				}
 			}
-			printf("%i\n", i);
 			while(i != l[m]){
 				--m;
 				if((m < 0)){
@@ -112,7 +111,6 @@ int main(int argc, char** argv)
 					m = 0;
 				}
 			}
-			printf("%02i %04i %04i\n", m, l[m], i);
 			displayimage();		
 		}
 	}
