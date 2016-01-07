@@ -13,6 +13,7 @@ char n[sizeof(path) + 15];
 void displayimage()
 {
 	snprintf(n, sizeof(n), "/%s/menu%04i.bin", path, l[m]);
+	printf("%s\n", n);
 	FILE *file = fopen(n,"rb");
 	if (file == NULL) return 0;
 	fseek(file,0,SEEK_END);
@@ -61,14 +62,13 @@ int main(int argc, char** argv)
 			}
 			displayimage();
 		}else if(hidKeysDown() & KEY_UP){
-			if (!(l[m - 1] < (l[m] - 1)) & !(m == 0)){
+			if (!(l[m - 1] < (l[m] - 1)) & (m != 0)){
 				--m;
 				if(m <= 0){
 					m = 0;
 				}	
 			}else{
-				i = (l[m] / 100);
-				i = ((menu[i] - 1) + i * 100);
+				i = ((menu[l[m] / 100] - 1) + i * 100);
 				while(i != l[m]){
 					++m;
 					if(m > (max_entries - 1)){
@@ -78,29 +78,41 @@ int main(int argc, char** argv)
 			}
 			displayimage();
 		}else if(hidKeysDown() & KEY_L){
-			i = ((l[m] / 100 - 1) * 100);
-			if((i < 0)){
-				i = ((menu[num_menus - 1] - 1) + ((l[max_entries - 1] / 100) * 100));
+			if((l[m] >= (submenu_start * 100))){
+				i = l[m];
+			}else if((l[m] > l[max_entries - 1])){
+				i = (submenu_start * 100);
+			}else{
+				i = ((l[m] / 100 - 1) * 100);
+				if(i < 0){
+					i = ((submenu_start - 1) * 100);
+				}
 			}
 			printf("%i\n", i);
 			while(i != l[m]){
 				--m;
 				if((m < 0)){
-					m = (max_entries - 1);
+					m = max_entries - 1;
 				}
 			}
 			displayimage();
 		}else if(hidKeysDown() & KEY_R){
-			i = ((l[m] / 100 + 1) * 100);
-			if((i > (l[max_entries - 1] / 100) * 100)){
+			if ((l[m] >= (submenu_start * 100))){
+				i = l[m];
+			}else if((l[m] > l[max_entries - 1])){
 				i = 0;
+			}else{
+				i = ((l[m] / 100 + 1) * 100);
 			}
 			while(i != l[m]){
 				m++;
-				if((m > (max_entries - 1))){
+				if((i >= (submenu_start * 100))){
+					i = 0;
+				}else if((m > (max_entries - 1))){
 					m = 0;
 				}
 			}
+			printf("%02i %04i %04i\n", m, l[m], i);
 			displayimage();		
 		}
 	}
